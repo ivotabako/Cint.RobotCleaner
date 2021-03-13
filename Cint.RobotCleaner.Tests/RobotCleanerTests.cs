@@ -11,6 +11,7 @@ namespace Cint.RobotCleaner.Tests
         [InlineData(1, 0, 0, "E", 1, 2)]
         [InlineData(1, 0, 0, "E", 5, 6)]
         [InlineData(1, 0, 0, "S", 5, 6)]
+        [InlineData(1, 0, 0, "W", 3, 4)]
         public void CleanRoomTests(params object[] input)
         {
             int numOfCommands = (int)input[0];
@@ -64,6 +65,12 @@ namespace Cint.RobotCleaner.Tests
                     if (command.Item1 == "S")
                     {
                         var newVortex = new Coordinates(currentVortex.X, currentVortex.Y - i);
+                        visitedVertices.Add(newVortex);
+                    }
+
+                    if (command.Item1 == "W")
+                    {
+                        var newVortex = new Coordinates(currentVortex.X - i, currentVortex.Y);
                         visitedVertices.Add(newVortex);
                     }
                 }
