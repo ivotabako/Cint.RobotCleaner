@@ -13,6 +13,7 @@ namespace Cint.RobotCleaner.Tests
         [InlineData(1, 0, 0, "S", 5, 6)]
         [InlineData(1, 0, 0, "W", 3, 4)]
         [InlineData(1, 0, 0, "N", 7, 8)]
+        [InlineData(2, 10, 22, "E", 2, "N", 1, 4)]
         public void CleanRoomTests(params object[] input)
         {
             int numOfCommands = (int)input[0];
@@ -21,7 +22,7 @@ namespace Cint.RobotCleaner.Tests
 
             for (int i = 0; i < numOfCommands; i++)
             {
-                commands.Add(new Command((string)input[i + 3], (int)input[i + 3 + 1]));
+                commands.Add(new Command((string)input[i*2 + 3], (int)input[i*2 + 3 + 1]));
             }
             
             var robot = new RobotCleaner();
