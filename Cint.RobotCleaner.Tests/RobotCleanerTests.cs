@@ -13,7 +13,7 @@ namespace Cint.RobotCleaner.Tests
         public void CleanRoomTests(params object[] input)
         {
             int numOfCommands = (int)input[0];
-            Tuple<int, int> initialPosition = new Tuple<int, int>((int)input[1], (int)input[2]);
+            Coordinates initialPosition = new Coordinates((int)input[1], (int)input[2]);
             List<Tuple<string, int>> commands = new List<Tuple<string, int>>();
 
             for (int i = 0; i < numOfCommands; i++)
@@ -27,11 +27,22 @@ namespace Cint.RobotCleaner.Tests
         }
     }
 
+    class Coordinates
+    {
+        public Coordinates(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+        public int X { get; }
+        public int Y { get; }
+    }
+
     class RobotCleaner
     {
-        internal int CleanRoom(int numOfCommands, Tuple<int, int> initialVortex, List<Tuple<string, int>> commands)
+        internal int CleanRoom(int numOfCommands, Coordinates initialVortex, List<Tuple<string, int>> commands)
         {
-            var visitedVertices = new HashSet<Tuple<int, int>>();
+            var visitedVertices = new HashSet<Coordinates>();
             visitedVertices.Add(initialVortex);
 
             if (numOfCommands == 0)
@@ -45,7 +56,7 @@ namespace Cint.RobotCleaner.Tests
                 {
                     if (command.Item1 == "E")
                     {
-                        var newVortex = new Tuple<int, int>(currentVortex.Item1 + i, currentVortex.Item2);
+                        var newVortex = new Coordinates(currentVortex.X + i, currentVortex.Y);
                         visitedVertices.Add(newVortex);
                     }
                 }
