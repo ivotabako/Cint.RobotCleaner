@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Cint.RobotCleaner.Tests
@@ -14,6 +15,9 @@ namespace Cint.RobotCleaner.Tests
         [InlineData(1, 0, 0, "W", 3, 4)]
         [InlineData(1, 0, 0, "N", 7, 8)]
         [InlineData(2, 10, 22, "E", 2, "N", 1, 4)]
+        [InlineData(3, 10, 22, "E", 2, "N", 2, "N", 2, 7)]
+        [InlineData(3, 10, 22, "E", 2, "N", 2, "W", 2, 7)]
+        [InlineData(3, 10, 22, "E", 2, "N", 2, "S", 2, 5)]
         public void CleanRoomTests(params object[] input)
         {
             int numOfCommands = (int)input[0];
@@ -57,7 +61,7 @@ namespace Cint.RobotCleaner.Tests
     {
         internal int CleanRoom(int numOfCommands, Coordinates initialVortex, List<Command> commands)
         {
-            var visitedVertices = new HashSet<Coordinates>();
+            var visitedVertices = new List<Coordinates>();
             visitedVertices.Add(initialVortex);
 
             if (numOfCommands == 0)
@@ -93,9 +97,11 @@ namespace Cint.RobotCleaner.Tests
                         visitedVertices.Add(newVortex);
                     }
                 }
+
+                currentVortex = visitedVertices[visitedVertices.Count-1];
             }
 
-            return visitedVertices.Count;
+            return visitedVertices.GroupBy(c => new { c.X, c.Y }).Select(g => g.First()).Count();
         }
     }
 }
