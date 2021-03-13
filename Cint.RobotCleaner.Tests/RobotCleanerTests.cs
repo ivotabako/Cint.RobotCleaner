@@ -6,40 +6,28 @@ namespace Cint.RobotCleaner.Tests
 {
     public class RobotCleanerTests
     {
-        [Theory]     
-        //[MemberData(nameof(Data))]
-        [InlineData(0, null, null, 0)]
-        //[InlineData(0, new Tuple<int, int>(0, 0), null, 1)]
-        public void CleanRoomTests(int numOfCommands, Coordinate initialPosition, List<Tuple<string, int>> commands, int expectedNumOfPlaces)
+        [Theory]
+        [InlineData(0, 0, 0, 0)]
+        public void CleanRoomTests(params object[] input)
         {
+            int numOfCommands = (int)input[0];
+            Tuple<int, int> initialPosition = new Tuple<int, int>((int)input[1], (int)input[2]);
+            List<Tuple<string, int>> commands = new List<Tuple<string, int>>();
+
+            for (int i = 0; i < numOfCommands; i++)
+            {
+                commands.Add(new Tuple<string, int>((string)input[i + 3], (int)input[i + 3 + 1]));
+            }
+            
             var robot = new RobotCleaner();
             int numOfPlaces = robot.CleanRoom(numOfCommands, initialPosition, commands);
-            Assert.Equal(expectedNumOfPlaces, numOfPlaces);
+            Assert.Equal(input[input.Length-1], numOfPlaces);
         }
-
-        public static IEnumerable<object[]> Data =>
-        new List<object[]>
-        {
-            new object[] { 0, null, null, 0 },
-            new object[] { 0, new Tuple<int,int>(0,0), null, 1 },
-        };
     }
 
-    [Serializable]
-    public class Coordinate
+    class RobotCleaner
     {
-        public Coordinate(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-        public int X { get; }
-        public int Y { get; }
-    }
-
-    public class RobotCleaner
-    {
-        internal int CleanRoom(int numOfCommands, Coordinate initialPosition, List<Tuple<string, int>> commands)
+        internal int CleanRoom(int numOfCommands, Tuple<int, int> initialPosition, List<Tuple<string, int>> commands)
         {
             return 0;
         }
