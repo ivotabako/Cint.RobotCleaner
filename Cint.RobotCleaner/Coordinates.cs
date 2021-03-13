@@ -1,6 +1,6 @@
-﻿namespace Cint.RobotCleaner.Tests
+﻿namespace Cint.RobotCleaner
 {
-    class Coordinates
+    public class Coordinates
     {
         public Coordinates(int x, int y)
         {

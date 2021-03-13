@@ -1,6 +1,6 @@
-﻿namespace Cint.RobotCleaner.Tests
+﻿namespace Cint.RobotCleaner
 {
-    class Command
+    public class Command
     {
         public Command(string direction, int steps)
         {

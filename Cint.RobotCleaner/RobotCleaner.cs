@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Cint.RobotCleaner.Tests
+namespace Cint.RobotCleaner
 {
-    class RobotCleaner
+    public class RobotCleaner
     {
-        internal int CleanRoom(int numOfCommands, Coordinates initialVortex, List<Command> commands)
+        public int CleanRoom(int numOfCommands, Coordinates initialVortex, List<Command> commands)
         {
             var newVortexCalculator = new Dictionary<string, Func<Coordinates, int, Coordinates>>()
             {
