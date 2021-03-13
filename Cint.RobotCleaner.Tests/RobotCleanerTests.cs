@@ -17,17 +17,28 @@ namespace Cint.RobotCleaner.Tests
         {
             int numOfCommands = (int)input[0];
             Coordinates initialPosition = new Coordinates((int)input[1], (int)input[2]);
-            List<Tuple<string, int>> commands = new List<Tuple<string, int>>();
+            List<Command> commands = new List<Command>();
 
             for (int i = 0; i < numOfCommands; i++)
             {
-                commands.Add(new Tuple<string, int>((string)input[i + 3], (int)input[i + 3 + 1]));
+                commands.Add(new Command((string)input[i + 3], (int)input[i + 3 + 1]));
             }
             
             var robot = new RobotCleaner();
             int numOfPlaces = robot.CleanRoom(numOfCommands, initialPosition, commands);
             Assert.Equal(input[input.Length-1], numOfPlaces);
         }
+    }
+
+    class Command
+    {
+        public Command(string direction, int steps)
+        {
+            Direction = direction;
+            Steps = steps;
+        }
+        public string Direction { get; }
+        public int Steps { get; }
     }
 
     class Coordinates
@@ -43,7 +54,7 @@ namespace Cint.RobotCleaner.Tests
 
     class RobotCleaner
     {
-        internal int CleanRoom(int numOfCommands, Coordinates initialVortex, List<Tuple<string, int>> commands)
+        internal int CleanRoom(int numOfCommands, Coordinates initialVortex, List<Command> commands)
         {
             var visitedVertices = new HashSet<Coordinates>();
             visitedVertices.Add(initialVortex);
@@ -55,27 +66,27 @@ namespace Cint.RobotCleaner.Tests
             var currentVortex = initialVortex; 
             foreach (var command in commands)
             {
-                for (int i = 1; i <= command.Item2; i++)
+                for (int i = 1; i <= command.Steps; i++)
                 {
-                    if (command.Item1 == "E")
+                    if (command.Direction == "E")
                     {
                         var newVortex = new Coordinates(currentVortex.X + i, currentVortex.Y);
                         visitedVertices.Add(newVortex);
                     }
 
-                    if (command.Item1 == "S")
+                    if (command.Direction == "S")
                     {
                         var newVortex = new Coordinates(currentVortex.X, currentVortex.Y - i);
                         visitedVertices.Add(newVortex);
                     }
 
-                    if (command.Item1 == "W")
+                    if (command.Direction == "W")
                     {
                         var newVortex = new Coordinates(currentVortex.X - i, currentVortex.Y);
                         visitedVertices.Add(newVortex);
                     }
 
-                    if (command.Item1 == "N")
+                    if (command.Direction == "N")
                     {
                         var newVortex = new Coordinates(currentVortex.X, currentVortex.Y + i);
                         visitedVertices.Add(newVortex);
