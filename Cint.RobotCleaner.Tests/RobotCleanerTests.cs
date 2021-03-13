@@ -8,6 +8,7 @@ namespace Cint.RobotCleaner.Tests
     {
         [Theory]
         [InlineData(0, 0, 0, 0)]
+        [InlineData(1, 0, 0, "E", 1, 2)]
         public void CleanRoomTests(params object[] input)
         {
             int numOfCommands = (int)input[0];
