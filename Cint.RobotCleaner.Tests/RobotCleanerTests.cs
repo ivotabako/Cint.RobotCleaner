@@ -18,6 +18,7 @@ namespace Cint.RobotCleaner.Tests
         [InlineData(3, 10, 22, "E", 2, "N", 2, "N", 2, 7)]
         [InlineData(3, 10, 22, "E", 2, "N", 2, "W", 2, 7)]
         [InlineData(3, 10, 22, "E", 2, "N", 2, "S", 2, 5)]
+        [InlineData(4, 10, 22, "E", 2, "N", 2, "W", 2, "S", 2, 8)]
         public void CleanRoomTests(params object[] input)
         {
             int numOfCommands = (int)input[0];
@@ -61,6 +62,14 @@ namespace Cint.RobotCleaner.Tests
     {
         internal int CleanRoom(int numOfCommands, Coordinates initialVortex, List<Command> commands)
         {
+            var newVortexCalculator = new Dictionary<string, Func<Coordinates, int, Coordinates>>()
+            {
+                { "E", ( c, s)=> new Coordinates(c.X + s, c.Y ) },
+                { "S", ( c, s)=> new Coordinates(c.X, c.Y - s ) },
+                { "W", ( c, s)=> new Coordinates(c.X - s, c.Y ) },
+                { "N", ( c, s)=> new Coordinates(c.X, c.Y + s) }
+            };
+
             var visitedVertices = new List<Coordinates>();
             visitedVertices.Add(initialVortex);
 
@@ -68,37 +77,15 @@ namespace Cint.RobotCleaner.Tests
             {
                 return visitedVertices.Count;
             }
-            var currentVortex = initialVortex; 
+            var currentVortex = initialVortex;
             foreach (var command in commands)
             {
                 for (int i = 1; i <= command.Steps; i++)
                 {
-                    if (command.Direction == "E")
-                    {
-                        var newVortex = new Coordinates(currentVortex.X + i, currentVortex.Y);
-                        visitedVertices.Add(newVortex);
-                    }
-
-                    if (command.Direction == "S")
-                    {
-                        var newVortex = new Coordinates(currentVortex.X, currentVortex.Y - i);
-                        visitedVertices.Add(newVortex);
-                    }
-
-                    if (command.Direction == "W")
-                    {
-                        var newVortex = new Coordinates(currentVortex.X - i, currentVortex.Y);
-                        visitedVertices.Add(newVortex);
-                    }
-
-                    if (command.Direction == "N")
-                    {
-                        var newVortex = new Coordinates(currentVortex.X, currentVortex.Y + i);
-                        visitedVertices.Add(newVortex);
-                    }
+                    visitedVertices.Add(newVortexCalculator[command.Direction](currentVortex, i));
                 }
 
-                currentVortex = visitedVertices[visitedVertices.Count-1];
+                currentVortex = visitedVertices[^1];
             }
 
             return visitedVertices.GroupBy(c => new { c.X, c.Y }).Select(g => g.First()).Count();
