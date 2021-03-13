@@ -30,12 +30,17 @@ namespace Cint.RobotCleaner.Tests
     {
         internal int CleanRoom(int numOfCommands, Tuple<int, int> initialPosition, List<Tuple<string, int>> commands)
         {
+            var visitedVertices = new HashSet<Tuple<int, int>>();
+            visitedVertices.Add(initialPosition);
+
             if (numOfCommands == 0)
             {
-                return 1;
+                return visitedVertices.Count;
             }
 
             return 2;
+
+
         }
     }
 }
