@@ -29,19 +29,29 @@ namespace Cint.RobotCleaner.Tests
 
     class RobotCleaner
     {
-        internal int CleanRoom(int numOfCommands, Tuple<int, int> initialPosition, List<Tuple<string, int>> commands)
+        internal int CleanRoom(int numOfCommands, Tuple<int, int> initialVortex, List<Tuple<string, int>> commands)
         {
             var visitedVertices = new HashSet<Tuple<int, int>>();
-            visitedVertices.Add(initialPosition);
+            visitedVertices.Add(initialVortex);
 
             if (numOfCommands == 0)
             {
                 return visitedVertices.Count;
             }
+            var currentVortex = initialVortex; 
+            foreach (var command in commands)
+            {
+                for (int i = 1; i <= command.Item2; i++)
+                {
+                    if (command.Item1 == "E")
+                    {
+                        var newVortex = new Tuple<int, int>(currentVortex.Item1 + i, currentVortex.Item2);
+                        visitedVertices.Add(newVortex);
+                    }
+                }
+            }
 
-            return 2;
-
-
+            return visitedVertices.Count;
         }
     }
 }
