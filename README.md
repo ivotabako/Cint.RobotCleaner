@@ -1,3 +1,5 @@
+Open the PDF file for the original instructions.
+
 Robot Cleaner
 
 Background
